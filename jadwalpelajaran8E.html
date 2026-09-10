@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadwal Pelajaran</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f1f5f9;
+    color: #172033;
+}
+
+.header {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
+    padding: 25px 18px;
+    border-radius: 0 0 25px 25px;
+}
+
+.header h1 {
+    font-size: 26px;
+}
+
+.header p {
+    margin-top: 6px;
+    opacity: .9;
+}
+
+.container {
+    padding: 18px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.days {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+}
+
+.days button {
+    border: none;
+    padding: 11px 16px;
+    border-radius: 20px;
+    background: white;
+    color: #334155;
+    font-weight: bold;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px #00000015;
+}
+
+.days button.active {
+    background: #2563eb;
+    color: white;
+}
+
+.jadwal {
+    margin-top: 8px;
+}
+
+.card {
+    background: white;
+    margin-bottom: 12px;
+    padding: 15px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 3px 10px #00000012;
+    border-left: 5px solid #2563eb;
+}
+
+.waktu {
+    min-width: 95px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.mapel {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.keterangan {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.break {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.break .mapel {
+    color: #b45309;
+}
+
+.footer {
+    text-align: center;
+    color: #64748b;
+    font-size: 12px;
+    padding: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>📚 Jadwal Pelajaran</h1>
+    <p>SMP Negeri 6 Mojokerto</p>
+    <p>Kelas 8E</p>
+</div>
+
+<div class="container">
+
+    <div class="days">
+        <button onclick="showDay('Senin')" id="btnSenin">Senin</button>
+        <button onclick="showDay('Selasa')" id="btnSelasa">Selasa</button>
+        <button onclick="showDay('Rabu')" id="btnRabu">Rabu</button>
+        <button onclick="showDay('Kamis')" id="btnKamis">Kamis</button>
+        <button onclick="showDay('Jumat')" id="btnJumat">Jumat</button>
+    </div>
+
+    <div id="jadwal" class="jadwal"></div>
+
+</div>
+
+<div class="footer">
+    Jadwal berlaku mulai Senin, 20 Juli 2026
+</div>
+
+<script>
+
+const jadwal = {
+
+Senin: [
+    ["06:45 - 07:00", "UPACARA", "Kegiatan"],
+    ["07:00 - 09:40", "SBD", "Seni Budaya"],
+    ["10:00 - 12:00", "MAT", "Matematika"],
+    ["12:45 - 13:25", "PAI", "Pendidikan Agama Islam"],
+    ["13:25 - 14:45", "BIG", "Bahasa Inggris"]
+],
+
+Selasa: [
+    ["06:45 - 07:00", "LITERASI", "ROHANI"],
+    ["07:00 - 08:20", "IPS", "Ilmu Pengetahuan Sosial"],
+    ["08:20 - 09:40", "MAT", "Matematika"],
+    ["10:00 - 11:20", "IPA", "Ilmu Pengetahuan Alam"],
+    ["11:20 - 12:00", "JAW", "Bahasa Jawa"],
+    ["12:45 - 14:05", "BIN", "Bahasa Indonesia"],
+    ["14:05 - 14:45", "IMTAQ", "Kegiatan"]
+],
+
+Rabu: [
+    ["06:45 - 07:00", "LITERASI", "ROHANI"],
+    ["07:00 - 08:20", "BIN", "Bahasa Indonesia"],
+    ["08:20 - 09:00", "INF", "Informatika"],
+    ["09:00 - 09:40", "PJOK", "Pendidikan Jasmani"],
+    ["10:00 - 11:20", "PJOK", "Pendidikan Jasmani"],
+    ["11:20 - 12:00", "BK", "Bimbingan Konseling"],
+    ["12:45 - 13:25", "IPA", "Ilmu Pengetahuan Alam"],
+    ["13:25 - 14:45", "IPS", "Ilmu Pengetahuan Sosial"]
+],
+
+Kamis: [
+    ["06:45 - 07:00", "LITERASI", "ROHANI"],
+    ["07:00 - 08:20", "PAI", "Pendidikan Agama Islam"],
+    ["08:20 - 09:00", "PAN", "Pancasila"],
+    ["09:00 - 09:40", "BIN", "Bahasa Indonesia"],
+    ["10:00 - 10:40", "BIN", "Bahasa Indonesia"],
+    ["10:40 - 12:00", "IPA", "Ilmu Pengetahuan Alam"],
+    ["12:45 - 14:05", "INF", "Informatika"],
+    ["14:05 - 14:45", "IMTAQ", "Kegiatan"]
+],
+
+Jumat: [
+    ["06:45 - 07:30", "G7KAIH", "Bersahabat G7KAIH"],
+    ["07:30 - 08:00", "GLS-SS", "G7LH-SS"],
+    ["08:00 - 09:20", "BIG", "Bahasa Inggris"],
+    ["09:40 - 11:00", "PAN", "Pancasila"],
+    ["11:20 - 12:30", "SHOLAT JUMAT", "Kegiatan"],
+    ["13:00 - 14:30", "PRAMUKA", "Kegiatan"]
+]
+
+};
+
+function showDay(hari) {
+
+    const container = document.getElementById("jadwal");
+
+    document.querySelectorAll(".days button").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    document.getElementById("btn" + hari).classList.add("active");
+
+    container.innerHTML = "";
+
+    jadwal[hari].forEach(item => {
+
+        let card = document.createElement("div");
+        card.className = "card";
+
+        if (
+            item[1] === "SHOLAT JUMAT" ||
+            item[1] === "UPACARA" ||
+            item[1] === "PRAMUKA"
+        ) {
+            card.classList.add("break");
+        }
+
+        card.innerHTML = `
+            <div class="waktu">${item[0]}</div>
+            <div>
+                <div class="mapel">${item[1]}</div>
+                <div class="keterangan">${item[2]}</div>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+// otomatis buka hari sesuai hari sekarang
+const hariSekarang = new Date().getDay();
+
+const namaHari = [
+    "Minggu",
+    "Senin",
+    "Selasa",
+    "Rabu",
+    "Kamis",
+    "Jumat",
+    "Sabtu"
+];
+
+if (jadwal[namaHari[hariSekarang]]) {
+    showDay(namaHari[hariSekarang]);
+} else {
+    showDay("Senin");
+}
+
+</script>
+
+</body>
+</html>
